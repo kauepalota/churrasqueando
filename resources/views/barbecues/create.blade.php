@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-    <div class="pt-12 max-lg:px-6 container max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
+    <div class="pt-12 max-xl:px-6 container max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
         <div class="lg:w-1/2">
             <img class="rounded-lg object-cover w-full" alt="Barbecue" src={{ asset('svg/barbecue2.svg') }}>
         </div>
@@ -21,7 +21,7 @@
                 <p class="text-gray-500 mt-2">Vamos fornecer ferramentas que facilitam a organização e o controle de convidados, alimentos e bebidas.</p>
             </div>
 
-            <form>
+            <form method="POST" action="{{ route('barbecues.store') }}">
                 @csrf
                 <x-input label="Participantes esperados" name="participants" type="number" placeholder="10" />
                 <x-input label="Endereço" name="address" type="text" placeholder="Rua Rio de Janeiro, 200" />

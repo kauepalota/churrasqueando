@@ -1,5 +1,5 @@
 <div x-data="{
-    radioGroupSelectedValue: null,
+    radioGroupSelectedValue: {{ json_encode($selected ?? null) }},
     radioGroupOptions: @js($options)
 }" class="space-y-3 mb-4">
     <template x-for="(option, index) in radioGroupOptions" :key="index">

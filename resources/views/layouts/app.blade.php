@@ -19,8 +19,8 @@
     @vite('resources/css/app.css')
 </head>
 
-<body class="font-[Poppins] min-h-screen">
-    @if($header ?? false)
+<body class="flex flex-col font-[Poppins] min-h-screen">
+    @if ($header ?? false)
         <header class="p-6">
             <div class="container max-w-7xl mx-auto flex justify-between items-center">
                 <a href="/"
@@ -28,6 +28,7 @@
                     <x-lucide-flame class="size-6 mr-2" />
                     Churrasqueando
                 </a>
+
                 <nav class="flex text-sm flex-row space-x-4 items-center">
                     <a class="flex items-center text-red-700 group hover:text-red-500 max-md:hidden" href="/contactus">
                         Fale com nossa equipe
@@ -35,21 +36,37 @@
                         <x-lucide-arrow-right class="size-4 ml-0.5 hidden group-hover:inline-block" />
                     </a>
                     <a class="flex items-center bg-red-700 px-4 py-2.5 text-white rounded-3xl group transition-colors hover:bg-red-600"
-                        href="/login">
-                        Entrar
+                        href="{{ route('login') }}">
+                        @guest
+                            Entrar
+                        @endguest
+
+                        @auth
+                            Minha conta
+                        @endauth
                         <x-lucide-chevron-right class="size-4 ml-0.5 group-hover:hidden" />
                         <x-lucide-arrow-right class="size-4 ml-0.5 hidden group-hover:inline-block" />
                     </a>
                 </nav>
             </div>
         </header>
+
+        @if ($errors->any())
+            <div class="bg-red-200 border border-red-600 text-red-600 p-4 rounded-lg mb-6">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     @endisset
 
-    <main @yield('main-attributes')>
+    <main class="flex flex-1 flex-col w-screen items-center" @yield('main-attributes')>
         @yield('content')
     </main>
 
-    @if($footer ?? false)
+    @if ($footer ?? false)
         <footer class="bg-red-500">
             <div class="container w-full min-h-full mx-auto py-12 text-center">
                 <p class="text-lg text-white">
