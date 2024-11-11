@@ -9,6 +9,7 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "mallardduck/blade-lucide-icons": "^1.23",
+        "mercadopago/dx-php": "^3.0",
         "ramsey/uuid": "^4.7"
     },
     "require-dev": {

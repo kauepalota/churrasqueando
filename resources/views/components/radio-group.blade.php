@@ -1,12 +1,13 @@
 <div x-data="{
+    radioGroupName: '{{ $name }}',
     radioGroupSelectedValue: {{ json_encode($selected ?? null) }},
     radioGroupOptions: @js($options)
 }" class="space-y-3 mb-4">
     <template x-for="(option, index) in radioGroupOptions" :key="index">
-        <label @click="radioGroupSelectedValue = option.value" class="flex items-start p-5 space-x-3 bg-white border rounded-md shadow-sm hover:bg-gray-50 border-neutral-200/70">
+        <label @click="if(false) { radioGroupSelectedValue = option.value }" class="flex items-start p-5 space-x-3 bg-white border rounded-md shadow-sm hover:bg-gray-50 border-neutral-200/70">
             <input
                 type="radio"
-                name="radio-group"
+                name="{{ $name }}"
                 :value="option.value"
                 class="text-gray-900 translate-y-px focus:ring-red-700"
                 x-model="radioGroupSelectedValue"

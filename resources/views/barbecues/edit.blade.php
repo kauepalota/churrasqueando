@@ -1,73 +1,97 @@
 @extends('layouts.app', ['header' => true, 'footer' => true])
 
 @php
-    $radioOptions = config('barbecue-formats')
+    $radioOptions = config('barbecue-formats');
 @endphp
-
 
 @section('title', 'Visualizar Churrasco')
 
+@section('main-attributes')
+    class="bg-gray-50 flex items-center justify-center min-h-screen"
+@endsection
+
 @section('content')
-    <div class="max-xl:px-6 max-w-7xl container mx-auto py-12">
-        <h1 class="text-2xl font-bold mb-6">Visualizar Churrasco</h1>
+    @if (session('success'))
+        <div class="text-green-500 mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
 
-        <form method="POST" action="{{ route('barbecues.update', $barbecue->id) }}">
-            @csrf
-            @method('PUT')
+    @if (session('error'))
+        <div class="text-red-500 mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
 
-            <x-input label="Participantes esperados" name="participants" type="number" value="{{ $barbecue->participants }}" />
-            <x-input label="Endereço" name="address" type="text" value="{{ $barbecue->address }}" />
-            <x-date-picker id="date" name="date" value="{{ $barbecue->date }}" />
+    <div class="max-xl:px-6 max-w-4xl w-full bg-white shadow-md rounded-lg mt-12 p-8">
+        <h3 class="text-2xl font-semibold">Visualizar churrasco</h3>
 
-            <label class="block text-gray-700 text-sm mb-2" for="format">
-                Formato do churrasco
-            </label>
+        @if ($barbecue->payment_link_sent === 0)
+            <form class="mt-2" method="POST" action="{{ route('barbecues.update', $barbecue->id) }}">
+                @csrf
+                @method('PUT')
 
-            <x-radio-group required :options="$radioOptions" name="radio-group" :selected="$barbecue->format" />
+                <x-input label="Endereço" name="address" type="text" value="{{ $barbecue->address }}" />
+                <x-date-picker id="date" name="date" value="{{ $barbecue->date }}" :readonly="true" />
 
-            <div class="mb-4">
-                <label for="share-link" class="text-gray-700 text-sm mb-2">Link de Compartilhamento</label>
-                <div class="relative">
-                    <input id="share-link" type="text" value="{{ route('guests.show', $barbecue->id) }}" readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <button type="button" onclick="copyToClipboard()" class="right-2 top-2 absolute ml-4">
-                        <x-lucide-clipboard-copy class="size-5" />
-                    </button>
+                <label class="block text-gray-700 text-sm mb-2" for="format">
+                    Formato do churrasco
+                </label>
+                <x-radio-group required :options="$radioOptions" name="format" :selected="$barbecue->format" :readonly="false" />
+
+                <div class="flex items-center justify-between mt-6">
+                    <x-button type="submit">Atualizar</x-button>
                 </div>
-            </div>
+            </form>
+        @else
+            <div class="mt-2">
+                <p class="leading-7 [&:not(:first-child)]:mt-1">Endereço: {{ $barbecue->address }}</p>
+                <p class="leading-7 [&:not(:first-child)]:mt-1">Data: {{ $barbecue->date }}</p>
 
-            <div class="flex items-center justify-between">
-                <x-button type="submit">Atualizar</x-button>
-            </div>
-        </form>
+                @php
+                    $formatTitle = 'Formato desconhecido'; // Default value
 
-        <div class="mt-12">
+                    foreach ($radioOptions as $format) {
+                        if ($format['value'] == $barbecue->format) {
+                            $formatTitle = $format['title'];
+                            break;
+                        }
+                    }
+                @endphp
+
+                <p class="leading-7 [&:not(:first-child)]:mt-1">Formato: {{ $formatTitle }}</p>
+            </div>
+        @endif
+
+        <div class="mt-6">
+            @if ($barbecue->payment_link_sent === 0)
+                <div class="mb-4">
+                    <label for="share-link" class="text-gray-700 text-sm mb-2">Link de Compartilhamento</label>
+                    <div class="relative">
+                        <input id="share-link" type="text" value="{{ route('guests.show', $barbecue->id) }}" readonly
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <button type="button" onclick="copyToClipboard()" class="right-2 top-2 absolute ml-4">
+                            <x-lucide-clipboard-copy class="size-5" />
+                        </button>
+                    </div>
+                </div>
+            @endif
+
             <h2 class="text-xl font-bold mb-4">Convidados Confirmados</h2>
-            <table class="min-w-full bg-white">
-                <thead class="bg-gray-800 text-white">
-                <tr>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Nome</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Email</th>
-                </tr>
-                </thead>
-                <tbody class="text-gray-700">
-                @forelse ($barbecue->guests as $guest)
-                    <tr>
-                        <td class="text-left py-3 px-4">{{ $guest->name }}</td>
-                        <td class="text-left py-3 px-4">{{ $guest->email }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td class="text-left py-3 px-4" colspan="2">Nenhum convidado confirmado ainda.</td>
-                    </tr>
-                @endforelse
-                </tbody>
-            </table>
+
+            @if ($barbecue->format === 'split_equally')
+                <div class="my-6">
+                    <x-send-payment :barbecue="$barbecue" />
+                </div>
+            @endif
+
+            <x-guests-table :guests="$barbecue->guests" :canRemove="true" :canSetPaid="$barbecue->format === 'split_equally'" />
         </div>
     </div>
 
     <script>
         function copyToClipboard() {
-            var copyText = document.getElementById("share-link");
+            const copyText = document.getElementById("share-link");
             copyText.select();
             copyText.setSelectionRange(0, 99999); // Para dispositivos móveis
             navigator.clipboard.writeText(copyText.value);

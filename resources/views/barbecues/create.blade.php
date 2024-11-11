@@ -32,7 +32,7 @@
                     Formato do churrasco
                 </label>
 
-                <x-radio-group required :options="$radioOptions" name="radio-group" />
+                <x-radio-group required :options="$radioOptions" name="format" />
 
                 <div class="flex items-center justify-between">
                     <x-button type="submit">Criar</x-button>

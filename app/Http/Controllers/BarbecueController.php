@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log; // Import the Log facade
+use Illuminate\Support\Facades\Log;
+
 use App\Models\Barbecue;
 
 class BarbecueController extends Controller
@@ -31,10 +32,8 @@ class BarbecueController extends Controller
             'participants' => 'required|integer|min:1',
             'address' => 'required|string|max:255',
             'date' => 'required|date_format:d/m/Y H:i',
-            'radio-group' => 'required|string|max:255',
+            'format' => 'required|string|max:255',
         ]);
-
-        Log::info("Test  " . $request->input("radio-group"));
 
         try {
             // Criação do novo churrasco
@@ -42,7 +41,7 @@ class BarbecueController extends Controller
                 'participants' => $validated['participants'],
                 'address' => $validated['address'],
                 'date' => $validated['date'],
-                'format' => $request->input('radio-group'),
+                'format' => $validated['format'],
                 'user_id' => Auth::id(),
             ]);
             Log::info('Barbecue created successfully.');
@@ -76,15 +75,16 @@ class BarbecueController extends Controller
         }
 
         $request->validate([
-            'participants' => 'required|integer|min:1',
-            'address' => 'required|string|max:255',
-            'date' => 'required|date',
-            'radio-group' => 'required|string|max:255',
+            'address' => 'string|max:255',
+            'date' => 'date',
+            'format' => 'string|max:255',
         ]);
 
-        $barbecue->update($request->only(['participants', 'address', 'date', 'radio-group']));
+        Log::debug('Request data: ' . json_encode($request->all()));
+
+        $barbecue->update($request->only(['address', 'date', 'format']));
         Log::info('Barbecue updated successfully for ID ' . $barbecue->id);
 
-        return redirect()->route('barbecues.index');
+        return redirect()->back()->with('success', 'Churrasco atualizado com sucesso!');
     }
 }

@@ -19,7 +19,9 @@ class Barbecue extends Model
         'address',
         'participants',
         'date',
-        'format'
+        'format',
+        'total_cost',
+        'payment_link_sent'
     ];
 
     protected static function boot()

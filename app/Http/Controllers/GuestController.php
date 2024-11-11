@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Guest;
 use App\Models\Barbecue;
+use Illuminate\Support\Facades\Auth;
 
 class GuestController extends Controller
 {
@@ -35,5 +36,21 @@ class GuestController extends Controller
         ]);
 
         return redirect()->route('guests.confirmation', $barbecue->id)->with('success', 'Convidado confirmado com sucesso!');
+    }
+
+    public function destroy($guestId)
+    {
+        $guest = Guest::findOrFail($guestId);
+        if ($guest->barbecue->user_id != Auth::id()) {
+            return redirect()->route('barbecues.edit', $guest->barbecue->id)->withErrors('Você não tem permissão para remover este convidado.');
+        }
+
+        if ($guest->barbecue->payment_link_sent) {
+            return redirect()->route('barbecues.edit', $guest->barbecue->id)->withErrors('Não é possível remover convidados de churrascos com convite já enviado.');
+        }
+
+        $guest->delete();
+
+        return redirect()->route('barbecues.edit', $guest->barbecue->id)->with('success', 'Convidado removido com sucesso!');
     }
 }

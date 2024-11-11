@@ -104,7 +104,10 @@
         <div class="w-full mb-5">
             <label for="datepicker" class="block text-gray-700 text-sm mb-2">Data</label>
             <div class="relative w-[17rem]">
-                <input x-ref="datePickerInput" type="text" @click="datePickerOpen=!datePickerOpen" x-model="datePickerValue" x-on:keydown.escape="datePickerOpen=false" id="date" name="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight" placeholder="Select date and time" readonly />
+                <input x-ref="datePickerInput" type="text" @click="datePickerOpen=!datePickerOpen;"
+                       x-model="datePickerValue" x-on:keydown.escape="datePickerOpen=false" id="date" name="date"
+                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight read-only:cursor-not-allowed read-only:opacity-50"
+                       placeholder="Select date and time"/>
                 <div @click="datePickerOpen=!datePickerOpen; if(datePickerOpen){ $refs.datePickerInput.focus() }" class="absolute top-0 right-0 px-3 py-2 cursor-pointer text-neutral-400 hover:text-neutral-500">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 </div>
