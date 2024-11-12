@@ -1,3 +1,4 @@
+version: '3.8'
 services:
     app:
         build:
@@ -35,12 +36,12 @@ services:
             LOG_STACK: single
             LOG_DEPRECATIONS_CHANNEL: null
             LOG_LEVEL: info
-            DB_CONNECTION: sqlite
-            # DB_HOST: 127.0.0.1
-            # DB_PORT: 3306
-            # DB_DATABASE: laravel
-            # DB_USERNAME: root
-            # DB_PASSWORD:
+            DB_CONNECTION: pgsql
+            DB_HOST: postgres
+            DB_PORT: 5432
+            DB_DATABASE: laravel
+            DB_USERNAME: laravel
+            DB_PASSWORD: secret
             SESSION_DRIVER: database
             SESSION_LIFETIME: 120
             SESSION_ENCRYPT: 'false'
@@ -56,6 +57,8 @@ services:
             - ./docker-compose/php/local.ini:/usr/local/etc/php/conf.d/local.ini
         networks:
             - app-network
+        depends_on:
+            - postgres
 
     webserver:
         image: nginx:alpine
@@ -69,6 +72,22 @@ services:
         networks:
             - app-network
 
+    postgres:
+        image: postgres:13
+        container_name: postgres
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: laravel
+            POSTGRES_USER: laravel
+            POSTGRES_PASSWORD: secret
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        networks:
+            - app-network
+
 networks:
     app-network:
         driver: bridge
+
+volumes:
+    postgres-data:
