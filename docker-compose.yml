@@ -36,9 +36,9 @@ services:
             LOG_STACK: single
             LOG_DEPRECATIONS_CHANNEL: null
             LOG_LEVEL: info
-            DB_CONNECTION: pgsql
-            DB_HOST: postgres
-            DB_PORT: 5432
+            DB_CONNECTION: mysql
+            DB_HOST: mysql
+            DB_PORT: 3306
             DB_DATABASE: laravel
             DB_USERNAME: laravel
             DB_PASSWORD: secret
@@ -58,7 +58,7 @@ services:
         networks:
             - app-network
         depends_on:
-            - postgres
+            - mysql
 
     webserver:
         image: nginx:alpine
@@ -72,16 +72,17 @@ services:
         networks:
             - app-network
 
-    postgres:
-        image: postgres:13
-        container_name: postgres
+    mysql:
+        image: mysql:8
+        container_name: mysql
         restart: unless-stopped
         environment:
-            POSTGRES_DB: laravel
-            POSTGRES_USER: laravel
-            POSTGRES_PASSWORD: secret
+            MYSQL_ROOT_PASSWORD: rootpassword
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: secret
         volumes:
-            - postgres-data:/var/lib/postgresql/data
+            - mysql-data:/var/lib/mysql
         networks:
             - app-network
 
@@ -90,4 +91,4 @@ networks:
         driver: bridge
 
 volumes:
-    postgres-data:
+    mysql-data:
