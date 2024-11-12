@@ -9,7 +9,7 @@ class Guest extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['barbecue_id', 'name', 'email'];
+    protected $fillable = ['barbecue_id', 'name', 'email', 'paid_value'];
 
     public function barbecue()
     {

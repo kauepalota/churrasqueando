@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use MercadoPago\Client\Payment\PaymentClient;
 use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\Exceptions\InvalidArgumentException;
 use MercadoPago\Exceptions\MPApiException;
@@ -39,7 +40,7 @@ class PaymentController extends Controller
 
         $barbecue->updateOrFail([
             'total_cost' => $request->input('total_cost'),
-            'payment_link_sent' => false
+            'payment_link_sent' => true
         ]);
 
         $barbecue->refresh();
@@ -92,8 +93,7 @@ class PaymentController extends Controller
         ];
 
         $backUrls = array(
-            'success' => route('payment.success'),
-            'failure' => route('payment.failure')
+            'success' => route('payment.success')
         );
 
         $request = [
@@ -118,17 +118,25 @@ class PaymentController extends Controller
 
     public function paymentSuccess(Request $request)
     {
-        $guest = Guest::findOrFail();
+        MercadoPagoConfig::setAccessToken(env('MERCADO_PAGO_ACCESS_TOKEN'));
+
+        $payment_id = $request->input('payment_id');
+
+        $client = new PaymentClient();
+        $payment = $client->get($request->input('payment_id'));
+
+        $status = $payment->status;
+        if ($status !== 'approved') {
+            Log::error('Payment failed for payment ID ' . $payment_id);
+            return redirect()->route('/');
+        }
+        $external_reference = $payment->external_reference;
+
+        $guest = Guest::findOrFail($external_reference);
         $guest->has_paid = true;
+        $guest->paid_value += $payment->transaction_amount;
         $guest->save();
 
-        return redirect()->route('barbecues.show', $guest->barbecue_id)->with('success', 'Pagamento confirmado com sucesso.');
-    }
-
-    public function paymentFailure(Request $request)
-    {
-        $guest = Guest::findOrFail();
-        $guest->has_paid = false;
-        $guest->save();
+        return redirect()->route('/');
     }
 }

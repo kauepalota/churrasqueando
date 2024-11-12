@@ -26,7 +26,7 @@
     <div class="max-xl:px-6 max-w-4xl w-full bg-white shadow-md rounded-lg mt-12 p-8">
         <h3 class="text-2xl font-semibold">Visualizar churrasco</h3>
 
-        @if ($barbecue->payment_link_sent === 0)
+        @if (!$barbecue->payment_link_sent)
             <form class="mt-2" method="POST" action="{{ route('barbecues.update', $barbecue->id) }}">
                 @csrf
                 @method('PUT')
@@ -45,8 +45,8 @@
             </form>
         @else
             <div class="mt-2">
-                <p class="leading-7 [&:not(:first-child)]:mt-1">Endereço: {{ $barbecue->address }}</p>
-                <p class="leading-7 [&:not(:first-child)]:mt-1">Data: {{ $barbecue->date }}</p>
+                <p><strong>Endereço:</strong> {{ $barbecue->address }}</p>
+                <p><strong>Data:</strong> {{ $barbecue->date }}</p>
 
                 @php
                     $formatTitle = 'Formato desconhecido'; // Default value
@@ -59,12 +59,12 @@
                     }
                 @endphp
 
-                <p class="leading-7 [&:not(:first-child)]:mt-1">Formato: {{ $formatTitle }}</p>
+                <p><strong>Formato:</strong> {{ $formatTitle }}</p>
             </div>
         @endif
 
         <div class="mt-6">
-            @if ($barbecue->payment_link_sent === 0)
+            @if (!$barbecue->payment_link_sent)
                 <div class="mb-4">
                     <label for="share-link" class="text-gray-700 text-sm mb-2">Link de Compartilhamento</label>
                     <div class="relative">
@@ -80,9 +80,11 @@
             <h2 class="text-xl font-bold mb-4">Convidados Confirmados</h2>
 
             @if ($barbecue->format === 'split_equally')
-                <div class="my-6">
-                    <x-send-payment :barbecue="$barbecue" />
-                </div>
+                @if ($barbecue->guests->count() > 0)
+                    <div class="my-2">
+                        <x-send-payment :barbecue="$barbecue" />
+                    </div>
+                @endif
             @endif
 
             <x-guests-table :guests="$barbecue->guests" :canRemove="true" :canSetPaid="$barbecue->format === 'split_equally'" />
