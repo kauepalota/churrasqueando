@@ -79,7 +79,7 @@ class BarbecueController extends Controller
 
         $request->validate([
             'address' => 'string|max:255',
-            'date' => 'date',
+            'date' => 'required|date_format:d/m/Y H:i',
             'format' => 'string|max:255',
         ]);
 
