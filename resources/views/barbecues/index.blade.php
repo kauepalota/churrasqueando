@@ -141,8 +141,13 @@
                                             @enderror
                                         </div>
 
-                                        <x-radio-group required :options="$radioOptions" name="format" :selected="$barbecue->format"
-                                            :readonly="false" />
+                                        <div class="space-y-2">
+                                            <label for="format" class="text-sm font-medium text-gray-700">
+                                                Formato do churrasco
+                                            </label>
+                                            <x-radio-group required :options="$radioOptions" name="format" :selected="$barbecue->format"
+                                                :readonly="false" />
+                                        </div>
 
                                         <!-- Botão de submissão -->
                                         <div class="pt-4">
