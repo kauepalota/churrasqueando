@@ -48,7 +48,7 @@ class PaymentController extends Controller
         Log::debug('Barbecue data: ' . $barbecue);
 
         $guests = $barbecue->guests;
-        $costPerGuest = doubleval($request->input('total_cost') * 105) / ($guests->count() + 1);
+        $costPerGuest = doubleval($request->input('total_cost') * 1.05) / ($guests->count() + 1);
 
         Log::debug('Cost per guest: ' . $costPerGuest);
 
