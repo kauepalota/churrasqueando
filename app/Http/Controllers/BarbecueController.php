@@ -48,12 +48,11 @@ class BarbecueController extends Controller
                 'user_id' => Auth::id(),
             ]);
             Log::info('Barbecue created successfully.');
+            return redirect()->route('barbecues.index')->with('success', 'Churrasco criado com sucesso!');
         } catch (\Exception $e) {
             Log::error('Error creating barbecue: ' . $e->getMessage());
-            return redirect()->back()->withErrors('Ocorreu um erro ao criar o churrasco.');
+            return redirect()->back()->withErrors('Ocorreu um erro ao criar o churrasco.')->withInput();
         }
-
-        return redirect()->route('barbecues.index');
     }
 
     public function edit(Barbecue $barbecue)

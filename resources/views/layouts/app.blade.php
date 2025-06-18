@@ -95,6 +95,13 @@
                 </ul>
             </div>
         @endif
+
+        @if (session('success'))
+            <div
+                class="bg-green-100 border border-green-500 text-green-700 p-4 rounded-lg mb-6 max-w-lg mx-auto mt-4 shadow-sm">
+                {{ session('success') }}
+            </div>
+        @endif
     @endisset
 
     <main class="flex flex-1 flex-col w-screen items-center" @yield('main-attributes')>
