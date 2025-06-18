@@ -27,139 +27,74 @@
                         <div>
                             <h4 class="font-semibold text-gray-900 flex items-center gap-2">
                                 Adicionar Novo Churrasco
-                                <span class="text-sm text-gray-500" x-show="!showForm">(clique para expandir)</span>
                             </h4>
-                            <p class="text-sm text-gray-500" x-show="!showForm">
-                                Planeje seu próximo churrasco facilmente
-                            </p>
-                        </div>
-                        <div class="ml-auto">
-                            <x-lucide-chevron-down class="h-5 w-5 text-gray-400 transition-transform"
-                                x-bind:class="{ 'rotate-180': showForm }" />
                         </div>
                     </div>
+                    <div class="pt-4 border-t border-gray-100">
+                        <form method="POST" action="{{ route('barbecues.store') }}" class="space-y-4">
+                            @csrf
 
-                    <div x-show="showForm" x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 -translate-y-2"
-                        x-transition:enter-end="opacity-100 translate-y-0">
-                        <div class="pt-4 border-t border-gray-100">
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                                <!-- Painel de informações -->
-                                <div
-                                    class="bg-gradient-to-br from-red-500 to-red-700 text-white rounded-xl p-6 shadow-lg overflow-hidden relative lg:order-2">
-                                    <div class="absolute right-0 bottom-0 opacity-10">
-                                        <x-lucide-flame class="h-64 w-64" />
+                            <div class="space-y-2">
+                                <label for="participants" class="text-sm font-medium text-gray-700">
+                                    Número de participantes
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <x-lucide-users class="h-5 w-5 text-gray-400" />
                                     </div>
-                                    <div class="relative z-10 space-y-6">
-                                        <div>
-                                            <h2 class="text-xl font-bold mb-2">Organize seu churrasco perfeito</h2>
-                                            <p class="text-red-100 max-w-md">
-                                                Com o Churrasqueando você planeja eventos memoráveis, gerencia convidados e
-                                                acompanha pagamentos.
-                                            </p>
-                                        </div>
-
-                                        <div class="space-y-4">
-                                            <div class="flex items-center gap-3">
-                                                <div
-                                                    class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                                                    <x-lucide-users class="h-4 w-4" />
-                                                </div>
-                                                <div>
-                                                    <h3 class="font-medium text-sm">Gerenciamento de convidados</h3>
-                                                    <p class="text-xs text-red-100">Envie convites e acompanhe confirmações
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <div class="flex items-center gap-3">
-                                                <div
-                                                    class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                                                    <x-lucide-credit-card class="h-4 w-4" />
-                                                </div>
-                                                <div>
-                                                    <h3 class="font-medium text-sm">Controle de pagamentos</h3>
-                                                    <p class="text-xs text-red-100">Acompanhe quem já contribuiu e quanto
-                                                        falta</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <input type="number" name="participants" id="participants"
+                                        class="pl-10 block w-full rounded-lg border border-gray-300 py-2 px-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                        placeholder="10" min="1" required value="{{ old('participants') }}">
                                 </div>
-
-                                <!-- Formulário -->
-                                <div class="lg:order-1">
-                                    <form method="POST" action="{{ route('barbecues.store') }}" class="space-y-4">
-                                        @csrf
-
-                                        <div class="space-y-2">
-                                            <label for="participants" class="text-sm font-medium text-gray-700">
-                                                Número de participantes
-                                            </label>
-                                            <div class="relative">
-                                                <div
-                                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                    <x-lucide-users class="h-5 w-5 text-gray-400" />
-                                                </div>
-                                                <input type="number" name="participants" id="participants"
-                                                    class="pl-10 block w-full rounded-lg border border-gray-300 py-2 px-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                                    placeholder="10" min="1" required
-                                                    value="{{ old('participants') }}">
-                                            </div>
-                                            @error('participants')
-                                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-
-                                        <div class="space-y-2">
-                                            <label for="address" class="text-sm font-medium text-gray-700">
-                                                Endereço do evento
-                                            </label>
-                                            <div class="relative">
-                                                <div
-                                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                    <x-lucide-map-pin class="h-5 w-5 text-gray-400" />
-                                                </div>
-                                                <input type="text" name="address" id="address"
-                                                    class="pl-10 block w-full rounded-lg border border-gray-300 py-2 px-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                                    placeholder="Rua Rio de Janeiro, 200" required
-                                                    value="{{ old('address') }}">
-                                            </div>
-                                            @error('address')
-                                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-
-                                        <!-- Data e Hora -->
-                                        <div class="space-y-2">
-                                            <label for="date" class="text-sm font-medium text-gray-700">
-                                                Data e hora
-                                            </label>
-                                            <x-date-picker id="date" name="date" />
-                                            @error('date')
-                                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-
-                                        <div class="space-y-2">
-                                            <label for="format" class="text-sm font-medium text-gray-700">
-                                                Formato do churrasco
-                                            </label>
-                                            <x-radio-group required :options="$radioOptions" name="format" />
-                                        </div>
-
-                                        <!-- Botão de submissão -->
-                                        <div class="pt-4">
-                                            <button type="submit"
-                                                class="w-full flex justify-center items-center bg-red-600 text-white py-2.5 px-4 rounded-lg hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                <x-lucide-flame class="h-5 w-5 mr-2" />
-                                                Criar Churrasco
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                                @error('participants')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
-                        </div>
+
+                            <div class="space-y-2">
+                                <label for="address" class="text-sm font-medium text-gray-700">
+                                    Endereço do evento
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <x-lucide-map-pin class="h-5 w-5 text-gray-400" />
+                                    </div>
+                                    <input type="text" name="address" id="address"
+                                        class="pl-10 block w-full rounded-lg border border-gray-300 py-2 px-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                        placeholder="Rua Rio de Janeiro, 200" required value="{{ old('address') }}">
+                                </div>
+                                @error('address')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Data e Hora -->
+                            <div class="space-y-2">
+                                <label for="date" class="text-sm font-medium text-gray-700">
+                                    Data e hora
+                                </label>
+                                <x-date-picker id="date" name="date" />
+                                @error('date')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="format" class="text-sm font-medium text-gray-700">
+                                    Formato do churrasco
+                                </label>
+                                <x-radio-group required :options="$radioOptions" name="format" />
+                            </div>
+
+                            <!-- Botão de submissão -->
+                            <div class="pt-4">
+                                <button type="submit"
+                                    class="w-full flex justify-center items-center bg-red-600 text-white py-2.5 px-4 rounded-lg hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    <x-lucide-flame class="h-5 w-5 mr-2" />
+                                    Criar Churrasco
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -228,8 +163,7 @@
 
                                 <div class="grid grid-cols-1 gap-4 pt-4 border-t border-gray-100">
                                     <div class="flex items-start gap-3">
-                                        <div
-                                            class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                        <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
                                             <x-lucide-map-pin class="h-4 w-4 text-gray-500" />
                                         </div>
                                         <div class="flex-1">
@@ -241,8 +175,7 @@
                                     </div>
 
                                     <div class="flex items-start gap-3">
-                                        <div
-                                            class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                        <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
                                             <x-lucide-users class="h-4 w-4 text-gray-500" />
                                         </div>
                                         <div class="flex-1">
@@ -257,8 +190,7 @@
                                     </div>
 
                                     <div class="flex items-start gap-3">
-                                        <div
-                                            class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                        <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
                                             <x-lucide-tag class="h-4 w-4 text-gray-500" />
                                         </div>
                                         <div class="flex-1">
