@@ -17,6 +17,7 @@ class BarbecueController extends Controller
 
         $barbecues = Barbecue::where('user_id', Auth::id())->get();
         $user = Auth::user();
+
         return view('barbecues.index', compact('barbecues', 'user'));
     }
 
