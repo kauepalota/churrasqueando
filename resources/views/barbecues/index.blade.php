@@ -7,16 +7,8 @@
 @endphp
 
 @section('content')
-    <div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="max-w-full mx-auto px-6 py-12">
         <div class="space-y-8">
-            <!-- Header com informações da página -->
-            <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                    <x-lucide-flame class="h-6 w-6 text-red-600" />
-                    Meus Churrascos ({{ count($barbecues) }})
-                </h1>
-            </div>
-
             <!-- Card para adicionar novo churrasco -->
             <div class="border-dashed border-2 border-gray-200 hover:border-red-300 transition-colors rounded-xl bg-white">
                 <div class="p-6" x-data="{ showForm: false }">
