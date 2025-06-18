@@ -143,6 +143,26 @@ class PaymentController extends Controller
         $guest->paid_value += $payment->transaction_amount;
         $guest->save();
 
+        // Atualiza o saldo do anfitrião
+        // Pega o valor pago pelo convidado
+        $paymentAmount = $payment->transaction_amount;
+
+        // Define a porcentagem que vai para o sistema (comissão)
+        $commissionPercentage = 0; // 5% de comissão
+
+        // Calcula o valor a ser adicionado ao balance do anfitrião (após deduzir a comissão)
+        $hostAmount = $paymentAmount * (100 - $commissionPercentage) / 100;
+
+        // Busca o barbecue e seu anfitrião
+        $barbecue = $guest->barbecue;
+        $host = \App\Models\User::findOrFail($barbecue->user_id);
+
+        // Atualiza o saldo do anfitrião
+        $host->balance += $hostAmount;
+        $host->save();
+
+        Log::info("Payment processed: R$ {$paymentAmount} received. R$ {$hostAmount} added to host balance (ID: {$host->id})");
+
         return redirect()->route('/');
     }
 }
