@@ -15,7 +15,8 @@ class CreateGuestsTable extends Migration
     {
         Schema::create('guests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('barbecue_id')->constrained()->onDelete('cascade');
+            $table->uuid('barbecue_id');
+            $table->foreign('barbecue_id')->references('id')->on('barbecues')->onDelete('cascade');
             $table->string('name');
             $table->string('email');
             $table->timestamps();
