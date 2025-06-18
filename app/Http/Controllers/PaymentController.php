@@ -56,7 +56,7 @@ class PaymentController extends Controller
 
         foreach ($guests as $guest) {
             $request = $this->createPreferenceRequest(
-                $barbecue->id,
+                $guest->id,
                 $costPerGuest,
                 [
                     'name' => $guest->name,
