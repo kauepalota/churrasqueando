@@ -48,7 +48,7 @@ class PaymentController extends Controller
         Log::debug('Barbecue data: ' . $barbecue);
 
         $guests = $barbecue->guests;
-        $costPerGuest = doubleval($request->input('total_cost')) / ($guests->count() + 1);
+        $costPerGuest = doubleval($request->input('total_cost') * 100.05) / ($guests->count() + 1);
 
         Log::debug('Cost per guest: ' . $costPerGuest);
 
@@ -148,7 +148,7 @@ class PaymentController extends Controller
         $paymentAmount = $payment->transaction_amount;
 
         // Define a porcentagem que vai para o sistema (comissão)
-        $commissionPercentage = 0; // 5% de comissão
+        $commissionPercentage = 5; // 5% de comissão
 
         // Calcula o valor a ser adicionado ao balance do anfitrião (após deduzir a comissão)
         $hostAmount = $paymentAmount * (100 - $commissionPercentage) / 100;

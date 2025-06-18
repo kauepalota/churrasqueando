@@ -9,6 +9,121 @@
 @section('content')
     <div class="max-w-full mx-auto px-6 py-12">
         <div class="space-y-8">
+            <!-- Header da página com saldo -->
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                        <x-lucide-flame class="h-6 w-6 text-red-600" />
+                        Dashboard
+                    </h1>
+                    <p class="text-sm text-gray-500 mt-1">
+                        Bem-vindo ao Churrasqueando, {{ explode('@', $user->email)[0] }}!
+                    </p>
+                </div>
+                
+                <!-- Card de saldo -->
+                <div class="flex items-center p-4 bg-white border rounded-xl shadow-sm hover:shadow transition-all" 
+                     x-data="{ showDetails: false }">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-green-100 mr-4">
+                        <x-lucide-wallet class="w-6 h-6 text-green-600" />
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <p class="text-sm font-medium text-gray-500">Seu Saldo</p>
+                            <button @click="showDetails = !showDetails" class="text-gray-400 hover:text-gray-600">
+                                <x-lucide-info class="w-4 h-4" />
+                            </button>
+                        </div>
+                        <p class="text-2xl font-bold text-gray-900">
+                            R$ {{ number_format($user->balance, 2, ',', '.') }}
+                        </p>
+                        
+                        <!-- Detalhes do saldo -->
+                        <div x-show="showDetails" 
+                             x-transition:enter="transition ease-out duration-200" 
+                             x-transition:enter-start="opacity-0 scale-95" 
+                             x-transition:enter-end="opacity-100 scale-100"
+                             class="absolute mt-2 right-6 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 w-72">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-semibold text-gray-800">Detalhes do Saldo</h3>
+                                <button @click="showDetails = false" class="text-gray-400 hover:text-gray-600">
+                                    <x-lucide-x class="w-4 h-4" />
+                                </button>
+                            </div>
+                            <div class="space-y-2 text-sm">
+                                <p class="flex justify-between">
+                                    <span class="text-gray-600">Total recebido:</span>
+                                    <span class="font-medium">R$ {{ number_format($user->balance * 100/95, 2, ',', '.') }}</span>
+                                </p>
+                                <p class="flex justify-between">
+                                    <span class="text-gray-600">Taxa de serviço (5%):</span>
+                                    <span class="font-medium text-red-600">-R$ {{ number_format($user->balance * 5/95, 2, ',', '.') }}</span>
+                                </p>
+                                <div class="border-t border-gray-100 my-2 pt-2">
+                                    <p class="flex justify-between font-medium">
+                                        <span>Saldo disponível:</span>
+                                        <span class="text-green-600">R$ {{ number_format($user->balance, 2, ',', '.') }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cards de estatísticas -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white rounded-xl border p-4 shadow-sm hover:shadow transition-all">
+                    <div class="flex items-center space-x-4">
+                        <div class="rounded-full p-2 bg-blue-100">
+                            <x-lucide-calendar class="h-6 w-6 text-blue-600" />
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium text-gray-500">Total de Churrascos</div>
+                            <div class="text-xl font-semibold text-gray-900">{{ $barbecues->count() }}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl border p-4 shadow-sm hover:shadow transition-all">
+                    <div class="flex items-center space-x-4">
+                        <div class="rounded-full p-2 bg-purple-100">
+                            <x-lucide-users class="h-6 w-6 text-purple-600" />
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium text-gray-500">Total de Convidados</div>
+                            <div class="text-xl font-semibold text-gray-900">
+                                {{ $barbecues->sum(function($bbq) { return $bbq->guests->count(); }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl border p-4 shadow-sm hover:shadow transition-all">
+                    <div class="flex items-center space-x-4">
+                        <div class="rounded-full p-2 bg-green-100">
+                            <x-lucide-trending-up class="h-6 w-6 text-green-600" />
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium text-gray-500">Próximo Churrasco</div>
+                            <div class="text-xl font-semibold text-gray-900">
+                                @php
+                                    $nextBarbecues = $barbecues->filter(function($bbq) {
+                                        return \Carbon\Carbon::parse($bbq->date)->greaterThanOrEqualTo(now());
+                                    });
+                                @endphp
+                                
+                                @if($nextBarbecues->count() > 0)
+                                    {{ \Carbon\Carbon::parse($nextBarbecues->sortBy('date')->first()->date)->format('d/m/Y') }}
+                                @else
+                                    -
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Card para adicionar novo churrasco -->
             <div class="border-dashed border-2 border-gray-200 hover:border-red-300 transition-colors rounded-xl bg-white">
                 <div class="p-6" x-data="{ showForm: false }">
