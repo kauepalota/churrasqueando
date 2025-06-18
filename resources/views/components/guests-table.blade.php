@@ -19,7 +19,7 @@
                 <x-table.table-cell>{{ $guest->email }}</x-table.table-cell>
 
                 @if ($canSetPaid)
-                    <x-table.table-cell>{{ $guest->has_paid ? 'Sim' : 'Pendente' }}</x-table.table-cell>
+                    <x-table.table-cell>{{ $guest->has_paid ? 'Pago' : 'Pendente' }}</x-table.table-cell>
                 @endif
 
                 <x-table.table-cell>
