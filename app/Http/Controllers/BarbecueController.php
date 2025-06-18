@@ -21,8 +21,7 @@ class BarbecueController extends Controller
 
     public function create()
     {
-        Log::info('BarbecueController: create method called.');
-        return view('barbecues.create');
+        return index();
     }
 
     public function store(Request $request)
