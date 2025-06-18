@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -35,12 +36,14 @@ class BarbecueController extends Controller
             'format' => 'required|string|max:255',
         ]);
 
+        $date = Carbon::createFromFormat('d/m/Y H:i', $validated['date'])->format('Y-m-d H:i:s');
+
         try {
             // Criação do novo churrasco
             Barbecue::create([
                 'participants' => $validated['participants'],
                 'address' => $validated['address'],
-                'date' => $validated['date'],
+                'date' => $date,
                 'format' => $validated['format'],
                 'user_id' => Auth::id(),
             ]);
