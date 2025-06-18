@@ -141,47 +141,8 @@
                                             @enderror
                                         </div>
 
-                                        <!-- Formato do Churrasco -->
-                                        <div class="space-y-2">
-                                            <label for="format" class="text-sm font-medium text-gray-700">
-                                                Formato do churrasco
-                                            </label>
-
-                                            <div class="grid gap-2">
-                                                @foreach ($radioOptions as $option)
-                                                    <div
-                                                        class="relative rounded-lg border border-gray-200 hover:border-red-400 transition-colors">
-                                                        <input type="radio" name="format"
-                                                            id="format_{{ $option['value'] }}"
-                                                            value="{{ $option['value'] }}" class="peer hidden" required
-                                                            {{ old('format') == $option['value'] ? 'checked' : '' }}
-                                                            {{ !old('format') && $loop->first ? 'checked' : '' }}>
-                                                        <label for="format_{{ $option['value'] }}"
-                                                            class="block p-3 cursor-pointer rounded-lg peer-checked:border-red-500 peer-checked:ring-2 peer-checked:ring-red-500">
-                                                            <div class="flex items-start">
-                                                                <div class="flex-shrink-0 mr-3 mt-0.5">
-                                                                    <div
-                                                                        class="w-5 h-5 border border-gray-300 peer-checked:border-red-500 peer-checked:bg-red-500 rounded-full flex items-center justify-center">
-                                                                        <div
-                                                                            class="peer-checked:bg-white w-2.5 h-2.5 rounded-full">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div>
-                                                                    <h3 class="text-sm font-medium text-gray-900">
-                                                                        {{ $option['title'] }}</h3>
-                                                                    <p class="text-xs text-gray-500">
-                                                                        {{ $option['description'] }}</p>
-                                                                </div>
-                                                            </div>
-                                                        </label>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                            @error('format')
-                                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                            @enderror
-                                        </div>
+                                        <x-radio-group required :options="$radioOptions" name="format" :selected="$barbecue->format"
+                                            :readonly="false" />
 
                                         <!-- Botão de submissão -->
                                         <div class="pt-4">
