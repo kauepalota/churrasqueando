@@ -144,13 +144,6 @@
                                             </p>
                                         </div>
                                     </div>
-
-                                    <div class="opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <a href="{{ route('barbecues.edit', $barbecue->id) }}"
-                                            class="text-red-600 hover:text-red-700 p-1 rounded-full hover:bg-red-50">
-                                            <x-lucide-edit-3 class="h-5 w-5" />
-                                        </a>
-                                    </div>
                                 </div>
 
                                 <div class="grid grid-cols-1 gap-4 pt-4 border-t border-gray-100">
