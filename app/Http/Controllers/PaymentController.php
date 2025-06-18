@@ -120,16 +120,22 @@ class PaymentController extends Controller
     {
         MercadoPagoConfig::setAccessToken(env('MERCADO_PAGO_ACCESS_TOKEN'));
 
+        Log::debug('Payment request data: ' . json_encode($request));
+
         $payment_id = $request->input('payment_id');
 
         $client = new PaymentClient();
         $payment = $client->get($request->input('payment_id'));
+
+        Log::info('Payment details retrieved for payment ID ' . $payment_id);
 
         $status = $payment->status;
         if ($status !== 'approved') {
             Log::error('Payment failed for payment ID ' . $payment_id);
             return redirect()->route('/');
         }
+
+        Log::info('Payment approved for payment ID ' . $payment_id);
         $external_reference = $payment->external_reference;
 
         $guest = Guest::findOrFail($external_reference);
