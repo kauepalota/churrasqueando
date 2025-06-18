@@ -145,8 +145,7 @@
                                             <label for="format" class="text-sm font-medium text-gray-700">
                                                 Formato do churrasco
                                             </label>
-                                            <x-radio-group required :options="$radioOptions" name="format" :selected="$barbecue->format"
-                                                :readonly="false" />
+                                            <x-radio-group required :options="$radioOptions" name="format" />
                                         </div>
 
                                         <!-- Botão de submissão -->
