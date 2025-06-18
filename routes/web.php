@@ -32,5 +32,5 @@ Route::get('/barbecue/confirmation', function () {
 })->name('guests.confirmation');
 
 Route::post('/barbecues/{id}/create-payment-link', [PaymentController::class, 'create'])->name('barbecues.createPaymentLink')->middleware('auth');
-Route::post('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
-Route::post('/payment/failure', [PaymentController::class, 'paymentFailure'])->name('payment.failure');
+Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+Route::get('/payment/failure', [PaymentController::class, 'paymentFailure'])->name('payment.failure');
