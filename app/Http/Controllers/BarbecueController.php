@@ -77,15 +77,19 @@ class BarbecueController extends Controller
             abort(403);
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'address' => 'string|max:255',
             'date' => 'required|date_format:d/m/Y H:i',
             'format' => 'string|max:255',
         ]);
 
-        Log::debug('Request data: ' . json_encode($request->all()));
+        Log::debug('Request data: ' . json_encode($validated));
 
-        $barbecue->update($request->only(['address', 'date', 'format']));
+        // Converte a data para o formato correto
+        $validated['date'] = Carbon::createFromFormat('d/m/Y H:i', $validated['date'])->format('Y-m-d H:i:s');
+
+        $barbecue->update($validated);
+
         Log::info('Barbecue updated successfully for ID ' . $barbecue->id);
 
         return redirect()->back()->with('success', 'Churrasco atualizado com sucesso!');
