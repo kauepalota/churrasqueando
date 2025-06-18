@@ -40,7 +40,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             Log::info('Login successful for user: ' . $credentials['email']);
             $request->session()->regenerate();
-            return redirect()->intended(route('barbecues.create'));
+            return redirect()->intended(route('barbecues.index'));
         }
 
         // If login fails, try to register
@@ -54,7 +54,7 @@ class AuthController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
-            return redirect()->intended(route('barbecues.create'));
+            return redirect()->intended(route('barbecues.index'));
         }
 
         // If user exists but password is incorrect, return error

@@ -14,7 +14,7 @@
             </p>
 
             <a class="whitespace-nowrap max-w-min flex items-center bg-red-700 px-6 py-3 text-white rounded-3xl group transition-all duration-300 hover:bg-red-600 hover:shadow-lg hover:shadow-red-700/30"
-                href="{{ route('barbecues.create') }}">
+                href="{{ route('barbecues.index') }}">
                 Criar churrasco
                 <x-lucide-chevron-right class="size-4 ml-1.5 group-hover:hidden" />
                 <x-lucide-arrow-right class="size-4 ml-1.5 hidden group-hover:inline-block" />
@@ -62,7 +62,7 @@
                         facilitando ainda mais o planejamento.
                     </p>
                     <a class="flex items-center text-red-700 group hover:text-red-500 font-medium text-lg transition-all duration-300 max-md:hidden"
-                        href="{{ route('barbecues.create') }}">
+                        href="{{ route('barbecues.index') }}">
                         Criar churrasco
                         <x-lucide-chevron-right class="size-5 ml-1.5 group-hover:hidden" />
                         <x-lucide-arrow-right class="size-5 ml-1.5 hidden group-hover:inline-block" />
@@ -84,7 +84,7 @@
                 Planeje, convide e aproveite com a Churrasqueando.
             </p>
             <a class="inline-flex items-center bg-red-700 px-8 py-4 text-white text-lg rounded-3xl group transition-all duration-300 hover:bg-red-600 hover:shadow-lg hover:shadow-red-700/30 mt-4"
-                href="{{ route('barbecues.create') }}">
+                href="{{ route('barbecues.index') }}">
                 Começar agora
                 <x-lucide-arrow-right class="size-5 ml-2" />
             </a>

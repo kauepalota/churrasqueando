@@ -128,7 +128,7 @@
                         <ul class="space-y-2">
                             <li><a href="/" class="text-gray-400 hover:text-white transition-colors">Home</a>
                             </li>
-                            <li><a href="{{ route('barbecues.create') }}"
+                            <li><a href="{{ route('barbecues.index') }}"
                                     class="text-gray-400 hover:text-white transition-colors">Criar Churrasco</a>
                             </li>
                             <li><a href="/contactus" class="text-gray-400 hover:text-white transition-colors">Fale
