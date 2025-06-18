@@ -21,7 +21,10 @@ class BarbecueController extends Controller
 
     public function create()
     {
-        return index();
+        Log::info('BarbecueController: index method called.');
+
+        $barbecues = Barbecue::where('user_id', Auth::id())->get();
+        return view('barbecues.index', compact('barbecues'));
     }
 
     public function store(Request $request)
